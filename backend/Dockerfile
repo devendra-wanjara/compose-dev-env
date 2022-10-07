@@ -2,13 +2,13 @@ FROM golang:latest AS build
 WORKDIR /go/src/github.com/org/repo
 ##COPY . .
 
-#COPY go.mod go.sum ./
-#RUN go mod download && go mod verify
+COPY go.mod go.sum ./
+RUN go mod download && go mod verify
 
 
-#COPY . .
-#ENV CGO_ENABLED=0
-#RUN go build -v -o /usr/local/bin/app ./...
+COPY . .
+ENV CGO_ENABLED=0
+RUN go build -v -o /usr/local/bin/app ./...
 
 ##ENV CGO_ENABLED=0
 ##RUN go build -o server .
@@ -20,5 +20,5 @@ RUN apt-get update \
 
 FROM alpine:3.19
 EXPOSE 8000
-#COPY --from=build /go/src/github.com/org/repo/server /server
-#CMD ["/server"]
+COPY --from=build /go/src/github.com/org/repo/server /server
+CMD ["/server"]
