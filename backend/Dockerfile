@@ -1,4 +1,4 @@
-FROM golang:1.19 AS build
+FROM golang:latest AS build
 WORKDIR /go/src/github.com/org/repo
 #COPY . .
 
