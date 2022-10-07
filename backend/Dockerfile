@@ -1,9 +1,17 @@
 FROM golang:1.19 AS build
 WORKDIR /go/src/github.com/org/repo
-COPY . .
+#COPY . .
 
+COPY go.mod go.sum ./
+RUN go mod download && go mod verify
+
+
+COPY . .
 ENV CGO_ENABLED=0
-RUN go build -o server .
+RUN go build -v -o /usr/local/bin/app ./...
+
+#ENV CGO_ENABLED=0
+#RUN go build -o server .
 
 FROM build AS development
 RUN apt-get update \
