@@ -1,24 +1,24 @@
 FROM golang:latest AS build
 WORKDIR /go/src/github.com/org/repo
+##COPY . .
+
+#COPY go.mod go.sum ./
+#RUN go mod download && go mod verify
+
+
 #COPY . .
-
-COPY go.mod go.sum ./
-RUN go mod download && go mod verify
-
-
-COPY . .
-ENV CGO_ENABLED=0
-RUN go build -v -o /usr/local/bin/app ./...
-
 #ENV CGO_ENABLED=0
-#RUN go build -o server .
+#RUN go build -v -o /usr/local/bin/app ./...
 
-FROM build AS development
-RUN apt-get update \
-    && apt-get install -y git
-CMD ["go", "run", "main.go"]
+##ENV CGO_ENABLED=0
+##RUN go build -o server .
 
-FROM alpine:3.12
-EXPOSE 8000
-COPY --from=build /go/src/github.com/org/repo/server /server
-CMD ["/server"]
+#FROM build AS development
+#RUN apt-get update \
+#    && apt-get install -y git
+#CMD ["go", "run", "main.go"]
+
+#FROM alpine:3.12
+#EXPOSE 8000
+#COPY --from=build /go/src/github.com/org/repo/server /server
+#CMD ["/server"]
